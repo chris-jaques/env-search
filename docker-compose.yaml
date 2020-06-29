@@ -1,0 +1,8 @@
+version: "3"
+services:
+  debug:
+    build: .
+    volumes:
+      - $HOME/env:/root/env
+    environment:
+      - ENV_SEARCH_DEBUG=True

@@ -1,7 +1,8 @@
 FROM python:3.7-alpine
 
 WORKDIR /app
+COPY requirements.txt /app/requirements.txt
+RUN pip install -r requirements.txt
 COPY . .
-RUN ln -s /app/search.py /usr/bin/search
 
-CMD ["sh"]
+ENTRYPOINT [ "/app/search.py" ]
