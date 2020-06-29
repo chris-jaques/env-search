@@ -6,7 +6,7 @@ import os
 import sys
 import re
 from src.inputs import args
-from colorama import Fore, Back, Style
+import src.output as out
 
 
 def searchFile(filename, keyword):
@@ -43,7 +43,7 @@ def searchFile(filename, keyword):
                         if debug: print("Alias")
                         if(re.match(r'^alias ' + keyword + "=", line)):
                             if nameMatchOnly:
-                                printMatch(match_lines,keyword)
+                                out.write_match(match_lines,keyword)
                                 exit()
                             matches.insert(0,match_lines)
                         else:
@@ -63,7 +63,7 @@ def searchFile(filename, keyword):
                     if match:
                         if functionNameMatch:
                             if nameMatchOnly:
-                                printMatch(match_lines,keyword)
+                                out.write_match(match_lines,keyword)
                                 exit()
                             matches.insert(0,match_lines)
                         else:
@@ -79,35 +79,13 @@ def searchFile(filename, keyword):
                     functionNameMatch = False
     return matches
 
-def printMatch(match_lines, keyword):
-    print(Back.BLACK)
-    match = ""
-    for line in match_lines:
-        
-        m = re.search(r"" + re.escape(keyword),line,re.IGNORECASE)
-        if m:
-            match = m.group(0)
-
-        # Output a comment line
-        if(re.match(r'^#',line)):
-            print(Fore.GREEN + re.sub(re.escape(keyword), Fore.RED + match + Fore.GREEN,line,flags=re.I))
-        else:
-            print(Fore.BLUE + re.sub(re.escape(keyword),Fore.RED + match + Fore.BLUE,line,flags=re.I))
-    print(Style.RESET_ALL)
-
-def printFileHeader(filename, match_count):
-    print(Back.WHITE)
-    print(Fore.BLACK)
-    print(filename + Fore.CYAN  + " [" + str(match_count) + "]")
-    print(Style.RESET_ALL)
-
 
 if __name__ == "__main__":
     env_dir = os.path.expanduser("~") + "/env"
     search_string = args.search 
     nameMatchOnly = args.name_only
     debug = args.debug
-    print(Style.RESET_ALL)
+    # print(Style.RESET_ALL)
     output = []
     for root, dirs, files in os.walk(env_dir):
             for file in files:
@@ -118,6 +96,9 @@ if __name__ == "__main__":
 
     if len(output) > 0:
         for fileoutput in output:
-            printFileHeader(fileoutput["file"],len(fileoutput["matches"]))
+            out.write_header(
+                fileoutput['file'],
+                len(fileoutput['matches'])
+            )
             for match in fileoutput["matches"]:
-                printMatch(match,search_string)
+                out.write_match(match,search_string)
