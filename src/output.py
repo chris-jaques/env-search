@@ -8,7 +8,7 @@ def write_header(filename, match_count):
     print(Back.WHITE)
     print(Fore.BLACK)
     print(filename + Fore.CYAN  + " [" + str(match_count) + "]")
-    print(Style.RESET_ALL)
+    style_reset()
 
 def write_match(match_lines, keyword):
     print(Back.BLACK)

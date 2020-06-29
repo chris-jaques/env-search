@@ -27,7 +27,7 @@ def searchFile(filename, keyword):
 
             for line in contents.splitlines():
                 # Ignore the file headers
-                if header and re.match(r'^#',line):
+                if header and line.startswith('#'):
                     continue
                 elif header:
                     header = False
@@ -39,9 +39,9 @@ def searchFile(filename, keyword):
                     match = True
                     if debug: print("KEYWORD MATCH: ",line)
                     # Trivial Case : Alias Match
-                    if(re.match(r'^alias\ ', line)):
+                    if line.startswith('alias '):
                         if debug: print("Alias")
-                        if(re.match(r'^alias ' + keyword + "=", line)):
+                        if line.startswith('alias {}='.format(keyword)):
                             if nameMatchOnly:
                                 out.write_match(match_lines,keyword)
                                 exit()
@@ -52,10 +52,10 @@ def searchFile(filename, keyword):
                         match = False
 
                 # Match function definition
-                if(re.match(r"^[a-z\_\-]+\(\)\ ?\{",line,re.IGNORECASE)):
+                if re.match(r"^[a-z\_\-]+\(\)\ ?\{", line, re.IGNORECASE):
                     in_function = True
                     if debug: print("In a Function: ")
-                    if(re.match(r"^" + keyword + "\(\)\ ?{",line)):
+                    if(re.match(r"^" + keyword + r"\(\)\ ?{",line)):
                         functionNameMatch = True
                 elif(in_function and re.match(r'^}$',line)):
                     if debug: print("End of Function ")
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     search_string = args.search 
     nameMatchOnly = args.name_only
     debug = args.debug
-    # print(Style.RESET_ALL)
+
     output = []
     for root, dirs, files in os.walk(env_dir):
             for file in files:
