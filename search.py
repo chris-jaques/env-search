@@ -5,6 +5,7 @@
 import os
 import sys
 import re
+from src.inputs import args
 
 def fg(color):
     """
@@ -140,30 +141,22 @@ def printFileHeader(filename, match_count):
     reset()
 
 
-env_dir = os.path.expanduser("~") + "/env"
-if len(sys.argv) > 1:
-    search_string = sys.argv[1]
-else:
-    search_string = " "
+if __name__ == "__main__":
+    env_dir = os.path.expanduser("~") + "/env"
+    search_string = args.search 
+    nameMatchOnly = args.name_only
+    debug = args.debug
+    reset()
+    output = []
+    for root, dirs, files in os.walk(env_dir):
+            for file in files:
+                if file.endswith(".al"):
+                    matches = searchFile(env_dir + "/" + file, search_string)
+                    if len(matches) > 0:
+                        output.append({"file": file, "matches": matches})
 
-nameMatchOnly = False
-if len(sys.argv) > 2 and sys.argv[2] == '-n':
-    nameMatchOnly = True
-
-debug = (False,True)[len(sys.argv) > 2 and sys.argv[2] == "-d"]
-
-reset()
-
-output = []
-for root, dirs, files in os.walk(env_dir):
-        for file in files:
-            if file.endswith(".al"):
-                matches = searchFile(env_dir + "/" + file, search_string)
-                if len(matches) > 0:
-                    output.append({"file": file, "matches": matches})
-
-if len(output) > 0:
-    for fileoutput in output:
-        printFileHeader(fileoutput["file"],len(fileoutput["matches"]))
-        for match in fileoutput["matches"]:
-            printMatch(match,search_string)
+    if len(output) > 0:
+        for fileoutput in output:
+            printFileHeader(fileoutput["file"],len(fileoutput["matches"]))
+            for match in fileoutput["matches"]:
+                printMatch(match,search_string)
