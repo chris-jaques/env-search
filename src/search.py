@@ -90,3 +90,6 @@ class Matches():
 
     def append(self, definition):
         self.definitions.append(definition)
+
+    def count(self) -> int:
+        return len(self.definitions)

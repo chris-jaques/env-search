@@ -9,26 +9,31 @@ from src.inputs import args
 import src.output as out
 from src.search import EnvSearch
 
-if __name__ == "__main__":
-    env_dir = os.path.expanduser("~") + "/env"
+def find_matches(args):
     search = EnvSearch(args)
-
     output = []
-    for root, dirs, files in os.walk(env_dir):
+    for _, _, files in os.walk(args.env_dir):
         for file in files:
             if file.endswith(".al"):
-                matches = search.search_file(env_dir + "/" + file, args.search)
+                matches = search.search_file("{}/{}".format(args.env_dir, file), args.search)
                 if matches.exact_match:
-                    output = [matches]
-                    break
+                    return [matches]
                 if len(matches.definitions) > 0:
                     output.append(matches)
+    return output
 
-    if len(output) > 0:
-        for fileoutput in output:
+
+def display_matches(matches, args):
+    for file_matches in matches:
+        # Only output exact matches when name_only flag is set
+        if file_matches.exact_match or not args.name_only:
             out.write_header(
-                fileoutput.filename,
-                len(fileoutput.definitions)
+                file_matches.filename,
+                file_matches.count()
             )
-            for match in fileoutput.definitions:
+            for match in file_matches.definitions:
                 out.write_match(match, args.search)
+
+if __name__ == "__main__":
+    matches = find_matches(args)
+    display_matches(matches, args)
