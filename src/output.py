@@ -12,14 +12,8 @@ def write_header(filename, match_count):
 
 def write_match(match_lines, keyword):
     print(Back.BLACK)
-    match = ""
     for line in match_lines:
         
-        # Get the exact text for the match in order to preserve casing
-        m = re.search(r"" + re.escape(keyword),line,re.IGNORECASE)
-        if m:
-            match = m.group(0)
-
         # Output a comment line
         if(re.match(r'^#',line)):
             fg = Fore.GREEN
@@ -28,7 +22,7 @@ def write_match(match_lines, keyword):
 
         print(fg + re.sub(
                         re.escape(keyword),
-                        Fore.RED + match + fg,
+                        lambda m: Fore.RED + m.group(0) + fg,
                         line,
                         flags=re.I
                     )
