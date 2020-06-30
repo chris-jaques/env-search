@@ -6,3 +6,8 @@ services:
       - $HOME/env:/root/env
     environment:
       - ENV_SEARCH_DEBUG=True
+  lint:
+    image: cytopia/pylint
+    volumes:
+      - .:/data
+    entrypoint: ['pylint', '/data/src']

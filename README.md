@@ -10,3 +10,8 @@ docker run -v ~/env:/root/env siege4/env-search search $SEARCH_STRING
 ```
 docker-compose run debug $SEARCH_STRING
 ```
+
+## Linter
+```
+docker-compose run lint
+```
