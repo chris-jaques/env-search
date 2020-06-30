@@ -76,6 +76,7 @@ class EnvSearch():
         return matches
 
 class Matches():
+    """Collection of search matches for a file"""
     def __init__(self, filename:str, definitions = None, exact_match=False):
         self.filename = basename(filename)
         self.exact_match = exact_match
@@ -83,13 +84,17 @@ class Matches():
 
     @classmethod
     def exact(cls, filename:str, definition: list):
+        """Returns a Matches object for an exact match"""
         return cls(filename, [definition], True)
 
     def insert(self, definition):
+        """Adds definition to start of list"""
         self.definitions.insert(0, definition)
 
     def append(self, definition):
+        """Adds definition to end of list"""
         self.definitions.append(definition)
 
     def count(self) -> int:
+        """Returns number of definitions"""
         return len(self.definitions)

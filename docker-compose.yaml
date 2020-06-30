@@ -10,4 +10,5 @@ services:
     image: cytopia/pylint
     volumes:
       - .:/data
-    entrypoint: ['pylint', '/data/src']
+    # entrypoint: 'sh'
+    entrypoint: ['pylint', '/data']
