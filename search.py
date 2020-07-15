@@ -7,7 +7,7 @@ import sys
 import re
 from src.inputs import args
 import src.output as out
-from src.search import EnvSearch
+from src.core import EnvSearch
 
 def find_matches(args):
     search = EnvSearch(args)
