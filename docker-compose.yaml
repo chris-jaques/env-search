@@ -1,0 +1,14 @@
+version: "3"
+services:
+  debug:
+    build: .
+    volumes:
+      - $HOME/env:/root/env
+    environment:
+      - ENV_SEARCH_DEBUG=True
+  lint:
+    image: cytopia/pylint
+    volumes:
+      - .:/data
+    # entrypoint: 'sh'
+    entrypoint: ['pylint', '/data']
