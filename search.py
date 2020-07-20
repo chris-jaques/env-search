@@ -5,7 +5,6 @@
 import os
 import sys
 import re
-from src.inputs import args
 import src.output as out
 from src.core import EnvSearch
 
@@ -35,5 +34,9 @@ def display_matches(matches, args):
                 out.write_match(match, args.search)
 
 if __name__ == "__main__":
+    # Parse inputs
+    from src.inputs import args
+    # Search env for matches
     matches = find_matches(args)
+    # Output
     display_matches(matches, args)
