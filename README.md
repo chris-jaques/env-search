@@ -3,7 +3,7 @@ Searches all functions and aliases in your [env](https://github.com/chris-jaques
 
 ## Example Usage
 ```
-docker run -v ~/env:/root/env siege4/env-search search $SEARCH_STRING
+docker run -v ~/env:/root/env siege4/env-search "${SEARCH_STRING}"
 ```
 
 ## Debugging
